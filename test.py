@@ -54,7 +54,7 @@ def visualize_result(data, pred, cfg):
 
 def test(segmentation_module, loader, gpu):
     segmentation_module.eval()
-
+    print(type(segmentation_module))
     pbar = tqdm(total=len(loader))
     for batch_data in loader:
         # process data
