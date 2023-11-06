@@ -84,6 +84,7 @@ class TrainDataset(BaseDataset):
         self.cur_idx = 0
         self.if_shuffled = False
     def encode_segmap(self, mask):
+        mask=np.array(mask)
         valid_classes = [1, 2, 3, 5, 12, 13, 18, 21, 43, 88]
         void_classes = [i for i in range(1, 151 + 1) if i not in valid_classes]
         class_name = [
@@ -105,6 +106,7 @@ class TrainDataset(BaseDataset):
         # Put all void classes to 11
         for _validc in valid_classes:
             mask[mask == _validc] = self.class_map[_validc]
+        mask=Image.fromarray(mask)
         return mask
     def _get_sub_batch(self):
         while True:
