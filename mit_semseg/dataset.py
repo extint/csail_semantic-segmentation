@@ -85,7 +85,7 @@ class TrainDataset(BaseDataset):
         self.if_shuffled = False
     def encode_segmap(self, mask):
         valid_classes = [1, 2, 3, 5, 12, 13, 18, 21, 43, 88]
-        void_classes = [i for i in range(1, 151 + 1) if i not in valid_classes]
+        void_classes = [i for i in range(1, 151 + 1) if i not in self.valid_classes]
         class_name = [
                 "wall",
                 "building",
@@ -99,8 +99,8 @@ class TrainDataset(BaseDataset):
                 "streetlight",
                 "unlabelled"
             ]
-        class_map = dict(zip(valid_classes, range(len(valid_classes))))   	
-        for _voidc in self.void_classes:
+        class_map = dict(zip(self.valid_classes, range(len(valid_classes))))   	
+        for _voidc in void_classes:
             mask[mask == _voidc] = 11
         # Put all void classes to 11
         for _validc in self.valid_classes:
