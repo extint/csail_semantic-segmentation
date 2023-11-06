@@ -101,8 +101,8 @@ class TrainDataset(BaseDataset):
             ]
         class_map = dict(zip(valid_classes, range(len(valid_classes))))   	
         for _voidc in self.void_classes:
-            mask[mask == _voidc] = 12
-        # Put all void classes to zero
+            mask[mask == _voidc] = 11
+        # Put all void classes to 11
         for _validc in self.valid_classes:
             mask[mask == _validc] = self.class_map[_validc]
         return mask
@@ -137,7 +137,6 @@ class TrainDataset(BaseDataset):
             np.random.seed(index)
             np.random.shuffle(self.list_sample)
             self.if_shuffled = True
-
         # get sub-batch candidates
         batch_records = self._get_sub_batch()
 
@@ -206,7 +205,8 @@ class TrainDataset(BaseDataset):
                 (segm_rounded.size[0] // self.segm_downsampling_rate,
                  segm_rounded.size[1] // self.segm_downsampling_rate),
                 interp='nearest')
-            segm = encode_segmap(segm)
+            segm = self.encode_segmap(segm)
+
             # image transform, to torch float tensor 3xHxW
             img = self.img_transform(img)
 
