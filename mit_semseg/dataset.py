@@ -105,7 +105,7 @@ class TrainDataset(BaseDataset):
             mask[mask == _voidc] = 11
         # Put all void classes to 11
         for _validc in valid_classes:
-            mask[mask == _validc] = self.class_map[_validc]
+            mask[mask == _validc] = class_map[_validc]
         mask=Image.fromarray(mask)
         return mask
     def _get_sub_batch(self):
