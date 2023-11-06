@@ -38,7 +38,7 @@ def dict_gather(outputs, target_device, dim=0):
             return Gather.apply(target_device, dim, *outputs)
         elif out is None:
             return None
-        elif isinstance(out, collections.Mapping):
+        elif isinstance(out, collections.abc.Mapping):
             return {k: gather_map([o[k] for o in outputs]) for k in out}
         elif isinstance(out, collections.Sequence):
             return type(out)(map(gather_map, zip(*outputs)))
