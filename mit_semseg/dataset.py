@@ -68,6 +68,31 @@ class BaseDataset(torch.utils.data.Dataset):
 
 
 class TrainDataset(BaseDataset):
+	    # Reducing number of classes (My Change)
+    def encode_segmap(self, mask):
+        valid_classes = [1, 2, 3, 5, 12, 13, 18, 21, 43, 88]
+        void_classes = [i for i in range(1, 151 + 1) if i not in valid_classes]
+        class_name = [
+                "wall",
+                "building",
+                "sky",
+                "tree",
+                "sidewalk",
+                "person",
+                "plant life",
+                "automobile",
+                "pillar",
+                "streetlight",
+                "unlabelled"
+            ]
+        class_map = dict(zip(valid_classes, range(len(valid_classes))))   	
+        for _voidc in self.void_classes:
+            mask[mask == _voidc] = 12
+        # Put all void classes to zero
+        for _validc in self.valid_classes:
+            mask[mask == _validc] = self.class_map[_validc]
+        return mask
+	    
     def __init__(self, root_dataset, odgt, opt, batch_per_gpu=1, **kwargs):
         super(TrainDataset, self).__init__(odgt, opt, **kwargs)
         self.root_dataset = root_dataset
@@ -179,10 +204,10 @@ class TrainDataset(BaseDataset):
             segm_rounded.paste(segm, (0, 0))
             segm = imresize(
                 segm_rounded,
-                (segm_rounded.size[0] // self.segm_downsampling_rate, \
-                 segm_rounded.size[1] // self.segm_downsampling_rate), \
+                (segm_rounded.size[0] // self.segm_downsampling_rate,
+                 segm_rounded.size[1] // self.segm_downsampling_rate),
                 interp='nearest')
-
+            segm=encode_segmap(segm)
             # image transform, to torch float tensor 3xHxW
             img = self.img_transform(img)
 
@@ -197,6 +222,7 @@ class TrainDataset(BaseDataset):
         output['img_data'] = batch_images
         output['seg_label'] = batch_segms
         return output
+        
 
     def __len__(self):
         return int(1e10) # It's a fake length due to the trick that every loader maintains its own list

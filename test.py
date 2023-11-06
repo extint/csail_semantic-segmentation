@@ -176,6 +176,11 @@ if __name__ == '__main__':
     cfg.MODEL.arch_decoder = cfg.MODEL.arch_decoder.lower()
 
     # absolute paths of model weights
+    # cfg.MODEL.weights_encoder = os.path.join(
+    #     cfg.DIR, 'encoder_' + cfg.TEST.checkpoint)
+    # cfg.MODEL.weights_decoder = os.path.join(
+    #     cfg.DIR, 'decoder_' + cfg.TEST.checkpoint)
+
     cfg.MODEL.weights_encoder = os.path.join(
         cfg.DIR, 'encoder_' + cfg.TEST.checkpoint)
     cfg.MODEL.weights_decoder = os.path.join(

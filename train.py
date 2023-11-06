@@ -15,7 +15,6 @@ from mit_semseg.models import ModelBuilder, SegmentationModule
 from mit_semseg.utils import AverageMeter, parse_devices, setup_logger
 from mit_semseg.lib.nn import UserScatteredDataParallel, user_scattered_collate, patch_replication_callback
 
-
 # train one epoch
 def train(segmentation_module, iterator, optimizers, history, epoch, cfg):
     batch_time = AverageMeter()

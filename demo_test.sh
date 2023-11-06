@@ -26,7 +26,7 @@ fi
 if [ -z "$DOWNLOAD_ONLY" ]
 then
 
-# Inference
+# InferenceMODEL_NAME
 python3 -u test.py \
   --imgs $TEST_IMG \
   --cfg config/ade20k-resnet50dilated-ppm_deepsup.yaml \

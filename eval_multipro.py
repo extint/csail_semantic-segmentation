@@ -118,7 +118,6 @@ def worker(cfg, gpu_id, start_idx, end_idx, result_queue):
     # Main loop
     evaluate(segmentation_module, loader_val, cfg, gpu_id, result_queue)
 
-
 def main(cfg, gpus):
     with open(cfg.DATASET.list_val, 'r') as f:
         lines = f.readlines()
