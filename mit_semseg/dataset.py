@@ -69,6 +69,20 @@ class BaseDataset(torch.utils.data.Dataset):
 
 class TrainDataset(BaseDataset):
 	    # Reducing number of classes (My Change)
+	    
+    def __init__(self, root_dataset, odgt, opt, batch_per_gpu=1, **kwargs):
+        super(TrainDataset, self).__init__(odgt, opt, **kwargs)
+        self.root_dataset = root_dataset
+        # down sampling rate of segm labe
+        self.segm_downsampling_rate = opt.segm_downsampling_rate
+        self.batch_per_gpu = batch_per_gpu
+
+        # classify images into two classes: 1. h > w and 2. h <= w
+        self.batch_record_list = [[], []]
+
+        # override dataset length when trainig with batch_per_gpu > 1
+        self.cur_idx = 0
+        self.if_shuffled = False
     def encode_segmap(self, mask):
         valid_classes = [1, 2, 3, 5, 12, 13, 18, 21, 43, 88]
         void_classes = [i for i in range(1, 151 + 1) if i not in valid_classes]
@@ -92,21 +106,6 @@ class TrainDataset(BaseDataset):
         for _validc in self.valid_classes:
             mask[mask == _validc] = self.class_map[_validc]
         return mask
-	    
-    def __init__(self, root_dataset, odgt, opt, batch_per_gpu=1, **kwargs):
-        super(TrainDataset, self).__init__(odgt, opt, **kwargs)
-        self.root_dataset = root_dataset
-        # down sampling rate of segm labe
-        self.segm_downsampling_rate = opt.segm_downsampling_rate
-        self.batch_per_gpu = batch_per_gpu
-
-        # classify images into two classes: 1. h > w and 2. h <= w
-        self.batch_record_list = [[], []]
-
-        # override dataset length when trainig with batch_per_gpu > 1
-        self.cur_idx = 0
-        self.if_shuffled = False
-
     def _get_sub_batch(self):
         while True:
             # get a sample record
@@ -207,7 +206,7 @@ class TrainDataset(BaseDataset):
                 (segm_rounded.size[0] // self.segm_downsampling_rate,
                  segm_rounded.size[1] // self.segm_downsampling_rate),
                 interp='nearest')
-            segm=encode_segmap(segm)
+            segm = encode_segmap(segm)
             # image transform, to torch float tensor 3xHxW
             img = self.img_transform(img)
 
