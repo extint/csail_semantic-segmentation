@@ -35,9 +35,9 @@ _C.MODEL.arch_encoder = "resnet50dilated"
 # architecture of net_decoder
 _C.MODEL.arch_decoder = "ppm_deepsup"
 # weights to finetune net_encoder
-_C.MODEL.weights_encoder = ""
+_C.MODEL.weights_encoder = "./pth_files/encoder_epoch_20.pth"
 # weights to finetune net_decoder
-_C.MODEL.weights_decoder = ""
+_C.MODEL.weights_decoder = "./pth_files/decoder_epoch_20.pth"
 # number of feature channels between encoder and decoder
 _C.MODEL.fc_dim = 2048
 
