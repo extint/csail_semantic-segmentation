@@ -103,7 +103,7 @@ class TrainDataset(BaseDataset):
         for _voidc in void_classes:
             mask[mask == _voidc] = 11
         # Put all void classes to 11
-        for _validc in self.valid_classes:
+        for _validc in valid_classes:
             mask[mask == _validc] = self.class_map[_validc]
         return mask
     def _get_sub_batch(self):
