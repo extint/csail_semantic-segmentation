@@ -76,16 +76,16 @@ def checkpoint(nets, history, cfg, epoch):
 
     dict_encoder = net_encoder.state_dict()
     dict_decoder = net_decoder.state_dict()
-
+    dict=dict_encoder.update(dict_decoder)
     torch.save(
         history,
         '{}/history_epoch_{}.pth'.format(cfg.DIR, epoch))
     torch.save(
-        dict_encoder,
-        '{}/encoder_epoch_{}.pth'.format(cfg.DIR, epoch))
-    torch.save(
-        dict_decoder,
-        '{}/decoder_epoch_{}.pth'.format(cfg.DIR, epoch))
+        dict,
+        '{}/epoch_{}.pth'.format(cfg.DIR, epoch))
+    # torch.save(
+        # dict_decoder,
+        # '{}/decoder_epoch_{}.pth'.format(cfg.DIR, epoch))
 
 
 def group_weight(module):
